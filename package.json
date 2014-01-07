@@ -1,19 +1,22 @@
 {
-  "name": "PromiseToValidate",
-  "version": "0.0.0",
-  "description": "",
+  "name": "promise-to-validate",
+  "version": "0.2.1",
+  "description": "A simple promise based validation utility that wraps the functionality of node-validator",
   "main": "index.js",
   "scripts": {
-    "test": "mocha "
+    "test": "mocha ",
+    "pretest":"jshint `git diff --name-only| egrep .js`"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "mocha": "~1.16.2",
-    "chai": "~1.8.1"
+    "chai": "~1.8.1",
+    "jshint": "~2.4.1"
   },
   "dependencies": {
     "lodash": "~2.4.1",
-    "validator": "~2.0.0"
+    "validator": "~2.0.0",
+    "q": "~1.0.0"
   }
 }
