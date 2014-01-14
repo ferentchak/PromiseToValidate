@@ -1,15 +1,15 @@
 var chai = require('chai'),
     expect = chai.expect,
-    Validate = require('../').Validate,
-    Check = require('../').Check,
+    value = require('../').value,
+    check = require('../').check,
     Q = require('q');
-
-describe('Check', function() {
+    _ = require('lodash');
+describe('check', function() {
     it('should chain validators passed in as arguments', function(done) {
-      Check({a: "Word", b: "Word 2"})
-      .use(
-          Validate("a").isInt(),
-          Validate("b").isInt()
+      check({a: "Word", b: "Word 2"})
+      .where(
+          value("a").isInt(),
+          value("b").isInt()
       )
       .then(function(errorObject) {
         expect(errorObject).to.be.an('object');
@@ -20,11 +20,11 @@ describe('Check', function() {
     });
 
     it('should chain validators passed in as an array', function(done) {
-      Check({a: "Word", b: "Word 2"})
-      .use(
+      check({a: "Word", b: "Word 2"})
+      .where(
         [
-          Validate("a").isInt(),
-          Validate("b").isInt()
+          value("a").isInt(),
+          value("b").isInt()
         ]
       )
       .then(function(errorObject) {
@@ -34,11 +34,24 @@ describe('Check', function() {
       .then(done, done);
     });
 
+    it('should not include keys for valid inputs', function(done) {
+      check({a: "Word",b:9})
+      .where(
+        value("a").isInt(),
+        value("b").isInt()
+      )
+      .then(function(errorObject) {
+        expect(errorObject.a.length, "Error Count").to.equal(1);
+        expect(_.has(errorObject,'b'),"Key found").to.equal(false);
+      })
+      .then(done, done);
+    });
+
     it('should join errors based upon field name', function(done) {
-      Check({a: "Word"})
-      .use(
-        Validate("a").isInt(),
-        Validate("a").isInt()
+      check({a: "Word"})
+      .where(
+        value("a").isInt(),
+        value("a").isInt()
       )
       .then(function(errorObject) {
         expect(errorObject.a.length, "Error Count").to.equal(2);
@@ -47,13 +60,13 @@ describe('Check', function() {
     });
    
     it('should allow you to set the data after creation', function(done) {
-      var c = Check()
-      .use(
-        Validate("a").isInt(),
-        Validate("a").isInt()
+      var c = check()
+      .where(
+        value("a").isInt(),
+        value("a").isInt()
       );
-      c.set({a: "Word"})
-      .then(function(errorObject) {
+      c.set({a: "Word"});
+      c.then(function(errorObject) {
         expect(errorObject.a.length, "Error Count").to.equal(2);
       })
       .then(done, done);

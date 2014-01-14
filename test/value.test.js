@@ -1,31 +1,30 @@
 var chai = require('chai'),
     expect = chai.expect,
-    Validate = require('../').Validate,
+    value = require('../').value,
     Q = require('q');
-
-describe('Validate', function() {
+describe('value', function() {
   describe('basic validation', function() {
     it('should check if not an int', function(done) {
-      Validate("a", {a: "Word"})
+      value("a", {a: "Word"})
       .isInt()
       .then(function(errors) {
         expect(errors.length, "Error Count").to.equal(1);
-      }).
-      then(done, done);
+      })
+      .then(done, done);
     });
 
     it('should return no errors for valid input', function(done) {
-      Validate('a', {a: 9})
+      value('a', {a: 9})
       .isInt()
       .then(function(errors) {
         if(errors.length) console.log(errors);
         expect(errors.length, "Error Count").to.equal(0);
-      }).
-      then(done, done);
+      })
+      .then(done, done);
     });
 
     it('should allow the validation data to be added after object creation', function(done) {
-      var v = Validate('a')
+      var v = value('a')
         .custom(function (value){
           expect(value,"Value not passed").to.equal("value");
           return "Expected";
@@ -33,12 +32,12 @@ describe('Validate', function() {
         .set({a: "value"})
         .then(function(errors) {
           expect(errors[0]).to.equal("Expected");
-        }).
-        then(done, done);
+        })
+        .then(done, done);
     });
 
     it('should error if no validation data is set', function(done) {
-      Validate()
+      value()
       .then(function() {
       done(new Error("Error function not passed to fail callback"));
       })
@@ -48,7 +47,7 @@ describe('Validate', function() {
     });
 
     it('should validate multiple conditions ', function(done) {
-      Validate("a", {a: ""})
+      value("a", {a: ""})
       .isInt()
       .len(2, 100)
       .then(function(errors) {
@@ -60,7 +59,7 @@ describe('Validate', function() {
 
   describe('custom validator', function() {
     it('should allow chained asynchronous functions returning strings or arrays', function(done) {
-      Validate("a", {a: 9})
+      value("a", {a: 9})
       .isInt()
       .custom(function(value) {
         return Q(["Broken"]);
@@ -73,7 +72,7 @@ describe('Validate', function() {
       .then(done, done);
     });
     it('should allow synchronous functions', function(done) {
-      Validate("key", {key: "Tacos"})
+      value("key", {key: "Tacos"})
       .custom(function(value) {
         expect(value).to.equal('Tacos');
         return ["Broken"];
@@ -85,7 +84,7 @@ describe('Validate', function() {
       .then(done, done);
     });
     it('should allow scope to be passed with function', function(done) {
-      Validate("a", {a: ""})
+      value("a", {a: ""})
       .custom(function() {
         expect(this.test).to.equal("scope");
       }, {
@@ -95,15 +94,14 @@ describe('Validate', function() {
       .then(done, done);
     });
     it('should catch errors called and forward to error condition', function(done) {
-      Validate("a", {a: ""})
+      value("a", {a: ""})
       .custom(function() {
           throw (new Error("Expected to be thrown"));
       })
-      .then(function(errors) {})
       .then(function() {
           done(new Error("Error function not passed to fail callback"));
       })
-      .fail(function(error) {
+      .then(null,function(error) {
           done();
       });
     });

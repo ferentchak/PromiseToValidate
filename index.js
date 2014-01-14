@@ -1,4 +1,4 @@
 module.exports = {
-    Validate: require("./validate"),
-    Check: require("./check")
+    value: require("./value"),
+    check: require("./check")
 };

@@ -13,19 +13,19 @@ The goal of promise-to-validate is to make validation as simple and effortless a
 
 ### Usage
 ```
-var Check = require('promise-to-validate').Check;
-var Validate = require('promise-to-validate').Validate;
+var check = require('promise-to-validate').check;
+var value = require('promise-to-validate').value;
 
 var input = {
   voltron: "made of cats",
   ducks: "MUST wear pants",
   number:null
 };
-Check(input)
-.use(
-  Validate("voltron").isInt().isNull(),
-  Validate("number").isNull(),
-  Validate("ducks")
+check(input)
+.where(
+  value("voltron").isInt().isNull(),
+  value("number").isNull(),
+  value("ducks")
     .isEmail()
     .custom(function(){
       return "Error";
@@ -35,11 +35,9 @@ Check(input)
   console.log(errors);
   var expected = { 
     voltron: [ 'Invalid integer', 'String is not empty' ],
-    number: [],
     ducks: [ 'Invalid email', 'Error' ] 
   };
 });
-
 ```
 
 

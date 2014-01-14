@@ -11,7 +11,7 @@ Check.prototype.set = function(input){
   return this;
 };
 
-Check.prototype.use = Check.prototype.add = function(validators) {
+Check.prototype.where = Check.prototype.add = function(validators) {
   validators = (_.isArray(validators) ? validators : _.toArray(arguments)); 
   this.validators = this.validators.concat(validators);
   return this;
@@ -27,7 +27,8 @@ Check.prototype.then = function() {
     function(errors) {
       var results = {};
       _.each(errors, function(value, key) {
-        results[validators[key].field] = (results[validators[key].field] || []).concat(value);
+        if(value.length)
+          results[validators[key].field] = (results[validators[key].field] || []).concat(value);
       });
       return Q(results);
     }
