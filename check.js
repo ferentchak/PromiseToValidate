@@ -26,11 +26,14 @@ Check.prototype.then = function() {
   var promise = Q.all(_.clone(validators)).then(
     function(errors) {
       var results = {};
+      var set = false;
       _.each(errors, function(value, key) {
-        if(value.length)
+        if(value.length){
           results[validators[key].field] = (results[validators[key].field] || []).concat(value);
+          set=true;
+        }
       });
-      return Q(results);
+      return Q(set?results:undefined);
     }
   );
   return promise.then.apply(promise, arguments);

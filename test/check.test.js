@@ -47,6 +47,18 @@ describe('check', function() {
       .then(done, done);
     });
 
+    it('should not include an errorObject for completely valid inputs', function(done) {
+      check({b:9})
+      .where(
+        value("b").isInt()
+      )
+      .then(function(errorObject) {
+        expect(errorObject,"Error Object").to.equal(undefined);
+        expect(_.has(errorObject,'b'),"Key found").to.equal(false);
+      })
+      .then(done, done);
+    });
+
     it('should join errors based upon field name', function(done) {
       check({a: "Word"})
       .where(
