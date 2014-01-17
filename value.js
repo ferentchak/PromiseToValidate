@@ -49,9 +49,8 @@ Value.prototype.custom = function(customerValue, scope) {
     return this;
 };
 
-for (var v in new Check()) {
-  (function() {
-  var functionName = v;
+for (var name in new Check()) {
+  (function(functionName) {
   Value.prototype[functionName] = function() {
     var args = arguments;
     this.custom(function(value){
@@ -66,7 +65,7 @@ for (var v in new Check()) {
     });
     return this;
     };
-  })(); // jshint ignore:line
+  })(name); // jshint ignore:line
 }
 
 module.exports = function(field, input){
