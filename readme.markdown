@@ -1,6 +1,6 @@
 # promise-to-validate
 
-A promise based wrapper of [node-validator](https://github.com/chriso/node-validator)
+A promise based wrapper of [node-validator](https://github.com/chriso/validator.js/tree/316c6e62140b02f512cb7c3de57d4e407546fb71)
 
 ## Install
 `npm install promise-to-validate`
