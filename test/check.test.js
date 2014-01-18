@@ -83,5 +83,42 @@ describe('check', function() {
       })
       .then(done, done);
     });
+
+    it('should call the invalid callback when the data is invalid but not the valid callback',function(done){
+      check({a: "Word"})
+      .where(
+        value("a").custom(function(){return "Invalid";})
+      )
+      .invalid(function(errorObject) {
+        expect(errorObject.a.length, "Error Count").to.equal(1);
+        expect(errorObject.a[0], "Error Count").to.equal("Invalid");
+      })
+      .valid(function(){
+        done(new Error("Valid should not of been called"));
+      })
+      .then(
+        function(){done();}, 
+        done
+      );
+    });
+
+    it('should call the valid callback when the data is valid but not the invalid callback',function(done){
+      check({a: "Word"})
+      .where(
+        value("a").custom(function(){})
+      )
+      .valid(function(errorObject) {
+        expect(errorObject).to.equal(undefined);
+      })
+      .invalid(function(){
+        done(new Error("Valid should not of been called"));
+      })
+      .then(
+        function(){done();}, 
+        done
+      );
+    });
+
+
 });
 

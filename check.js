@@ -39,6 +39,24 @@ Check.prototype.then = function() {
   return promise.then.apply(promise, arguments);
 };
 
+Check.prototype.invalid = function(callback){
+ this.then(function (error){
+  if(error)
+    callback(error);
+ });
+ return this;
+};
+
+Check.prototype.valid = function(callback){
+ this.then(function (error){
+  if(!error)
+    callback();
+ });
+ return this;
+};
+
+
+
 module.exports = function(input){
   return new Check(input);
 };

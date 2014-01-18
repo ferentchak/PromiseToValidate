@@ -31,6 +31,12 @@ check(input)
       return "Error";
     })
 )
+.valid(function(){
+  //called if no invalid fields are found
+})
+.invalid(function(){
+  //called if an invalid field is found
+})
 .then(function(errors){
   console.log(errors);
   var expected = { 

@@ -39,7 +39,7 @@ Value.prototype.custom = function(customerValue, scope) {
         return promise.then(function(e) {
             if (_.isArray(e)) {
                 errors = errors.concat(e);
-            } else if (e) {
+            } else if (_.isString(e)) {
                 errors.push(e);
             }
             return Q(errors);
