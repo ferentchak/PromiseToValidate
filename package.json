@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha ",
-    "pretest":"jshint `git diff --name-only| egrep .js`"
+    "pretest":"jshint `git diff --name-only| egrep .js$`"
   },
   "author": "",
   "license": "MIT",
@@ -18,5 +18,17 @@
     "lodash": "~2.4.1",
     "validator": "~2.0.0",
     "q": "~1.0.0"
+  },
+  "jshintConfig": {
+    "boss":      true,
+    "node":      true,
+    "smarttabs": true,
+    "unused":    true,
+    "onecase":   true,
+    "lastsemic": true,
+    "newcap":    false,
+    "quotmark": "single",
+    "debug": true,
+    "indent":    2
   }
 }

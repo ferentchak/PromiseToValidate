@@ -40,22 +40,20 @@ Check.prototype.then = function() {
 };
 
 Check.prototype.invalid = function(callback){
- this.then(function (error){
-  if(error)
-    callback(error);
- });
- return this;
+  this.then(function (error){
+    if(error)
+      callback(error);
+  });
+  return this;
 };
 
 Check.prototype.valid = function(callback){
- this.then(function (error){
-  if(!error)
-    callback();
- });
- return this;
+  this.then(function (error){
+    if(!error)
+      callback();
+  });
+  return this;
 };
-
-
 
 module.exports = function(input){
   return new Check(input);
