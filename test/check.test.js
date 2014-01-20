@@ -99,7 +99,7 @@ describe('check', function() {
     );
   });
 
-  xit('should reject the promise if an error occurs in the function passed to valid',function(done){
+  it('should reject the promise if an error occurs in the function passed to valid',function(done){
     check({a: 'Word'})
     .where(
       value('a').custom(function(){return 'Invalid';})
@@ -108,22 +108,22 @@ describe('check', function() {
       throw new Error('Catch me');
     })
     .then(
-      function(){done();}, 
-      done
+      function(){done(new Error('promise not rejected'));}, 
+      function(){done();} 
     );
   });
 
-  xit('should reject the promise if the valid function returns a rejected promise',function(done){
+  it('should reject the promise if the valid function returns a rejected promise',function(done){
     check({a: 'Word'})
     .where(
-      value('a').custom(function(){return 'Invalid';})
+      value('a').custom(function(){})
     )
-    .invalid(function() {
-      throw new Error('Catch me');
+    .valid(function() {
+      Q.reject('Catch me');
     })
     .then(
-      function(){done();}, 
-      done
+      function(){done(new Error('promise not rejected'));}, 
+      function(){done();} 
     );
   });
 

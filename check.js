@@ -4,6 +4,7 @@ var Q = require('q'),
 var Check = function(input) {
   this.set(input);
   this.validators = [];
+  this.deferred = new Q.defer();
 };
 
 Check.prototype.set = function(input){
@@ -36,13 +37,23 @@ Check.prototype.then = function() {
       return Q(set?results:undefined);
     }
   );
-  return promise.then.apply(promise, arguments);
+  this.deferred.resolve();
+  return this.deferred.promise.then(promise.then.apply(promise, arguments));
 };
 
 Check.prototype.invalid = function(callback){
+  var that = this;
   this.then(function (error){
     if(error)
-      callback(error);
+    {
+      try{
+        callback(error);
+      }
+      catch(ex){
+        console.log('deferred');
+        that.deferred.reject(ex.message);
+      }
+    }
   });
   return this;
 };
@@ -50,7 +61,12 @@ Check.prototype.invalid = function(callback){
 Check.prototype.valid = function(callback){
   this.then(function (error){
     if(!error)
-      callback();
+      try{
+        callback();
+      }
+      catch(ex){
+        that.promise = Q.reject(ex.message);
+      }
   });
   return this;
 };
