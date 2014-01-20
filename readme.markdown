@@ -30,12 +30,6 @@ check(input)
       return "Error";
     })
 )
-.valid(function(){
-  //called if no invalid fields are found
-})
-.invalid(function(){
-  //called if an invalid field is found
-})
 .then(function(errors){
   var expected = { 
     voltron: [ 'Invalid integer', 'String is not empty' ],
