@@ -1,4 +1,4 @@
-var Check = require('validator').check,
+var validator = require('validator'),
   Q = require('q'),
   _ = require('lodash');
 
@@ -26,15 +26,15 @@ Value.prototype.getValue = function(){
   return this.input[this.field];
 };
 
-Value.prototype.custom = function(customerValue, scope) {
+Value.prototype.custom = function(customValidator, scope) {
   var that = this;
   function wrapper(errors) {
     var promise;
-    if (_.isFunction(customerValue)) {
-      customerValue = scope ? _.bind(customerValue, scope) : customerValue;
-      promise = Q(customerValue(that.getValue()));
+    if (_.isFunction(customValidator)) {
+      customValidator = scope ? _.bind(customValidator, scope) : customValidator;
+      promise = Q(customValidator(that.getValue()));
     } else {
-      promise = customerValue;
+      promise = customValidator;
     }
     return promise.then(function(e) {
       if (_.isArray(e)) {
@@ -49,19 +49,15 @@ Value.prototype.custom = function(customerValue, scope) {
   return this;
 };
 
-for (var name in new Check()) {
+for (var name in validator) {
   (function(functionName) {
     Value.prototype[functionName] = function() {
       var args = arguments;
       this.custom(function(value){
-        var error;
-        try {
-          var c = Check(value);
-          c[functionName].apply(c, args);
-        } catch (ex) {
-          error = ex.message;      
+        var validatorArgs = [value].concat(args);
+        if(!validator[functionName].apply(validator, validatorArgs)){
+          return 'Value "'+value + '" failed '+ functionName + ' validator';
         }
-        return error;
       });
       return this;
     };

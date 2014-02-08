@@ -67,7 +67,7 @@ check(obect).where[values]()
 
 
 #### value
-The value object returns a builder that has a collection of validation methods. For a list of all of the validation functions supported you can see the underlying library [node-validator](https://github.com/chriso/validator.js/tree/316c6e62140b02f512cb7c3de57d4e407546fb71) proxied by the value class. 
+The value object returns a builder that has a collection of validation methods. For a list of all of the validation functions supported you can see the underlying library [node-validator](https://github.com/chriso/validator.js#validators) proxied by the value class. 
 
 ### Install
 `npm install promise-to-validate`

@@ -49,7 +49,7 @@ describe('value', function() {
     it('should validate multiple conditions ', function(done) {
       value('a', {a: ''})
       .isInt()
-      .len(2, 100)
+      .isLength(2, 100)
       .then(function(errors) {
         expect(errors.length).to.equal(2);
       })
